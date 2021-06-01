@@ -1,4 +1,7 @@
-export type Reporter = (event: LogEvent) => void;
+import type { Reporter } from 'diary/reporters';
+import { text } from 'diary/reporters';
+
+import { is_node } from './helpers';
 
 type LogFn = (message?: string, ...args: unknown[]) => void;
 type LogFnAsError = (message?: string | Error, ...args: unknown[]) => void;
@@ -23,8 +26,6 @@ export type LogEvent =
 	| { level: 'error', error: Error } & Omit<LogEventBase, 'error'>
 	| { level: 'fatal', error: Error } & Omit<LogEventBase, 'error'>
 	| LogEventBase;
-
-const is_node = typeof process < 'u' && typeof process.stdout < 'u';
 
 const to_reg_exp = (x: string) => new RegExp(x.replace(/\*/g, '.*') + '$');
 let allows: RegExp[];
@@ -86,25 +87,6 @@ function logger(
 	}
 }
 
-// ~ Reporter
-
-const loglevel_strings: Record<LogLevels, string> = {
-	fatal: '✗ fatal',
-	error: '✗ error',
-	warn: '‼ warn ',
-	debug: '● debug',
-	info: 'ℹ info ',
-	log: '◆ log  ',
-} as const;
-
-const default_reporter: Reporter = (event) => {
-	let label = '';
-	if (is_node) label = `${loglevel_strings[event.level]} `;
-	if (event.name) label += `[${event.name}] `;
-
-	console[event.level === 'fatal' ? 'error' : event.level](label + event.message, ...event.extra);
-};
-
 // ~ Public api
 
 /**
@@ -124,7 +106,7 @@ const default_reporter: Reporter = (event) => {
  * @param onEmit The reporter that handles the output of the log messages
  */
 export function diary(name: string, onEmit?: Reporter): Diary {
-	onEmit = onEmit || default_reporter;
+	onEmit = onEmit || text;
 
 	return {
 		fatal: logger.bind(0, name, onEmit, 'fatal'),
@@ -144,4 +126,3 @@ export const warn = default_diary.warn;
 export const debug = default_diary.debug;
 export const info = default_diary.info;
 export const log = default_diary.log;
-export const defaultReporter = default_reporter;

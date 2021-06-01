@@ -1,11 +1,11 @@
 import * as assert from 'uvu/assert';
 import * as diary from '../src';
-import * as json from '../src/json';
+import { json } from '../src/reporters';
 import { describe, trap_console } from './helpers';
 
 describe('api', (it) => {
 	it('should export', () => {
-		assert.type(json.reporter, 'function');
+		assert.type(json, 'function');
 	});
 });
 
@@ -15,7 +15,7 @@ describe('output', (it) => {
 		const trap = trap_console('log', (...args: any) => {
 			result = args.join('');
 		});
-		const scope = diary.diary('json', json.reporter);
+		const scope = diary.diary('json', json);
 		scope.info('foo %s', 'bar');
 
 		assert.equal(
@@ -33,7 +33,7 @@ describe('output', (it) => {
 
 		const scope = diary.diary('json', (event) => {
 			event.context = { sequence: 0 };
-			json.reporter(event);
+			json(event);
 		});
 
 		scope.info('foo %s', 'bar');

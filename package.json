@@ -21,9 +21,9 @@
 			"import": "./diary/index.mjs",
 			"require": "./diary/index.js"
 		},
-		"./json": {
-			"import": "./json/index.mjs",
-			"require": "./json/index.js"
+		"./reporters": {
+			"import": "./reporters/index.mjs",
+			"require": "./reporters/index.js"
 		},
 		"./utils": {
 			"import": "./utils/index.mjs",

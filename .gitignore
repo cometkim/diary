@@ -15,5 +15,5 @@ node_modules
 # Code
 /types
 /diary
-/json
+/reporters
 /utils

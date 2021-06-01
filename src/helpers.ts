@@ -1,0 +1,1 @@
+export const is_node = typeof process < 'u' && typeof process.stdout < 'u';
