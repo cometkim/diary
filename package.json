@@ -29,6 +29,10 @@
 			"import": "./diary/node/index.mjs",
 			"require": "./diary/node/index.js"
 		},
+		"./worker": {
+			"import": "./diary/worker/index.mjs",
+			"require": "./diary/worker/index.js"
+		},
 		"./json": {
 			"import": "./json/index.mjs",
 			"require": "./json/index.js"
